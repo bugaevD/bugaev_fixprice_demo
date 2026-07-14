@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.support.wait import WebDriverWait
 from locators.base_page_locators import BasePageLocators
 from selenium.webdriver.support import expected_conditions as EC
@@ -10,14 +11,15 @@ class BasePage:
         self.wait = WebDriverWait(driver, 10)
         self.locators = BasePageLocators()
 
+    @allure.step("Open main page")
     def open_base_page(self, url):
         self.driver.get(url)
         self.wait.until(EC.visibility_of_element_located(BasePageLocators.MAIN_PAGE_LOGO))
-
+    @allure.step("Open login form")
     def open_login(self):
         self.driver.find_element(*BasePageLocators.LOGIN_BUTTON).click()
         self.wait.until(EC.element_to_be_clickable(BasePageLocators.LOGIN_EMAIL))
-
+    @allure.step("Login with email")
     def login_by_email(self, email, password, expected_name):
         self.driver.find_element(*BasePageLocators.LOGIN_EMAIL).click()
         self.wait.until(EC.element_to_be_clickable(BasePageLocators.EMAIL_INPUT)).send_keys(email)
