@@ -20,13 +20,18 @@ class LoginForm:
 
     @allure.step("Login with email")
     def login_by_email(self, email, password, expected_name):
-        self.driver.find_element(*LoginFormLocators.LOGIN_EMAIL).click()
-        self.wait.until(EC.element_to_be_clickable(LoginFormLocators.EMAIL_INPUT)).send_keys(email)
-        self.driver.find_element(*LoginFormLocators.PASSWORD_INPUT).send_keys(password)
-        self.driver.find_element(*LoginFormLocators.LOGIN_SUBMIT_BUTTON).click()
-        self.wait.until(EC.invisibility_of_element_located(LoginFormLocators.LOGIN_FORM))
+        with allure.step("Open login form"):
+            self.driver.find_element(*LoginFormLocators.LOGIN_EMAIL).click()
+        with allure.step(f"Fill user email with: {email}"):
+            self.wait.until(EC.element_to_be_clickable(LoginFormLocators.EMAIL_INPUT)).send_keys(email)
+        with allure.step(f"Fill user password with: {password}"):
+            self.driver.find_element(*LoginFormLocators.PASSWORD_INPUT).send_keys(password)
+        with allure.step("Click login button"):
+            self.driver.find_element(*LoginFormLocators.LOGIN_SUBMIT_BUTTON).click()
+        with allure.step(f"Verify user {expected_name} is logged in"):
+            self.wait.until(EC.invisibility_of_element_located(LoginFormLocators.LOGIN_FORM))
 
-        profile_name = self.driver.find_element(*BasePageLocators.PROFILE_NAME)
-        profile_name = profile_name.text
+            profile_name = self.driver.find_element(*BasePageLocators.PROFILE_NAME)
+            profile_name = profile_name.text
 
-        assert profile_name == expected_name, f"Ждали: {expected_name}, получили: {profile_name}"
+            assert profile_name == expected_name, f"Ждали: {expected_name}, получили: {profile_name}"
