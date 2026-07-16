@@ -4,7 +4,8 @@ import pytest
 from dotenv import load_dotenv
 from selenium import webdriver
 
-from pages.login_form import LoginForm
+from pages.login_form import LoginForm, UserData
+from pages.shopping_cart import ShoppingCart
 from utils import attach
 from pages.base_page import BasePage
 
@@ -99,16 +100,30 @@ def base_page(driver, base_url):
 
 
 @pytest.fixture
-def user_data():
-    return {
-        "email": os.getenv("USER_EMAIL"),
-        "password": os.getenv("USER_PASSWORD"),
-        "invalid_email": "invalid_email@mailru",
-        "invalid_password": "",
-        "expected_name": os.getenv("EXPECTED_NAME"),
-    }
+def base_url(request):
+    return request.config.getoption("--base_url")
 
 
 @pytest.fixture
-def base_url(request):
-    return request.config.getoption("--base_url")
+def valid_user():
+    return UserData(email=os.getenv("USER_EMAIL"), password=os.getenv("USER_PASSWORD"),
+                    expected_name=os.getenv("EXPECTED_NAME"))
+
+
+@pytest.fixture
+def login(driver, base_page, valid_user):
+    login_form = LoginForm(driver)
+    login_form.open_login()
+    login_form.fill_login_form(valid_user)
+    login_form.choose_default_store()
+    return base_page
+
+@pytest.fixture
+def cart(driver):
+    return ShoppingCart(driver)
+
+@pytest.fixture
+def cart_with_cleanup(cart, base_url):
+    yield cart
+    cart.open(base_url)
+    cart.remove_item_from_cart()
