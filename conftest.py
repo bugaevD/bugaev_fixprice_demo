@@ -9,10 +9,13 @@ from pages.shopping_cart import ShoppingCart
 from utils import attach
 from pages.base_page import BasePage
 
-# load_dotenv("test.env")
-
-
 load_dotenv()
+is_local = os.getenv("LOCAL") == "true"
+
+if not is_local:
+    load_dotenv("test.env")
+
+
 
 
 def pytest_addoption(parser):
@@ -49,39 +52,47 @@ def pytest_addoption(parser):
 
 @pytest.fixture
 def driver(request):
-    # browser = request.config.getoption("--browser")
-    # browser_version = request.config.getoption("--browser_version")
-    # headless = request.config.getoption("--headless").lower() == "true"
-    # window_size = request.config.getoption("--window-size")
-    #
-    # selenoid_url = os.getenv("SELENOID_URL")
-    # login = os.getenv("LOGIN")
-    # password = os.getenv("PASSWORD")
-    #
-    # command_executor = f"https://{login}:{password}@{selenoid_url}"
+    is_local = os.getenv("LOCAL") == "true"
 
-    options = webdriver.ChromeOptions()
-    options.add_argument("--window-size=2560,1440")
-    driver = webdriver.Chrome(options=options)
-    # if headless:
-    #     options.add_argument("--headless")
-    #
-    # options.add_argument(f"--window-size={window_size.replace('x', ',')}")
-    #
-    # selenoid_capabilities = {
-    #     "browserName": browser,
-    #     "browserVersion": browser_version,
-    #     "selenoid:options": {
-    #         "enableVNC": True,
-    #         "enableVideo": True
-    #     }
-    # }
-    # options.capabilities.update(selenoid_capabilities)
-    #
-    # driver = webdriver.Remote(
-    #     command_executor=command_executor,
-    #     options=options
-    # )
+
+    if is_local:
+        options = webdriver.ChromeOptions()
+        options.add_argument("--window-size=2560,1440")
+        driver = webdriver.Chrome(options=options)
+
+    else:
+        options = webdriver.ChromeOptions()
+        browser = request.config.getoption("--browser")
+        browser_version = request.config.getoption("--browser_version")
+        headless = request.config.getoption("--headless").lower() == "true"
+        window_size = request.config.getoption("--window-size")
+
+        selenoid_url = os.getenv("SELENOID_URL")
+        login = os.getenv("LOGIN")
+        password = os.getenv("PASSWORD")
+
+        command_executor = f"https://{login}:{password}@{selenoid_url}"
+
+
+        if headless:
+            options.add_argument("--headless")
+
+        options.add_argument(f"--window-size={window_size.replace('x', ',')}")
+
+        selenoid_capabilities = {
+            "browserName": browser,
+            "browserVersion": browser_version,
+            "selenoid:options": {
+                "enableVNC": True,
+                "enableVideo": True
+            }
+        }
+        options.capabilities.update(selenoid_capabilities)
+
+        driver = webdriver.Remote(
+            command_executor=command_executor,
+            options=options
+        )
 
     yield driver
 
@@ -115,7 +126,7 @@ def login(driver, base_page, valid_user):
     login_form = LoginForm(driver)
     login_form.open_login()
     login_form.fill_login_form(valid_user)
-    login_form.choose_default_store()
+    base_page.choose_default_store()
     return base_page
 
 
