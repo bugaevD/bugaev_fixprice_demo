@@ -27,7 +27,6 @@ class BasePage:
     ADDRESS_TITLE = (By.CSS_SELECTOR, "[data-component=AddressTitle] span")
     ADDRESS_CHOOSE_BUTTON = (By.CSS_SELECTOR, ".selected-store button")
 
-
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
@@ -78,8 +77,6 @@ class BasePage:
         self.driver.find_element(*self.ADD_PRODUCT_TO_CART).click()
         self.wait.until(EC.visibility_of_element_located(self.PRODUCT_DETAILS))
 
-
-
     @allure.step("Choose favorite magazine")
     def choose_default_store(self):
         self.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".modal-outer")))
@@ -93,4 +90,3 @@ class BasePage:
         address_title = self.driver.find_element(*self.ADDRESS_TITLE).text
         self.driver.find_element(*self.ADDRESS_CHOOSE_BUTTON).click()
         return address_title
-

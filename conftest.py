@@ -118,12 +118,15 @@ def login(driver, base_page, valid_user):
     login_form.choose_default_store()
     return base_page
 
+
 @pytest.fixture
 def cart(driver):
     return ShoppingCart(driver)
 
+
 @pytest.fixture
-def cart_with_cleanup(cart, base_url):
+def cart_with_cleanup(driver, base_url):
+    cart = ShoppingCart(driver)
     yield cart
     cart.open(base_url)
     cart.remove_item_from_cart()

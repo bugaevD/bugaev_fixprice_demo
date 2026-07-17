@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from pages.base_page import BasePage
 
+
 class ShoppingCart(BasePage):
     SHOPPING_CART = (By.CSS_SELECTOR, ".cart.link")
     BUTTON_SHOW_ALL_PRODUCTS = (By.CSS_SELECTOR, "button.collapse")

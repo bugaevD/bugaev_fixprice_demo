@@ -5,6 +5,7 @@ import pytest
 from selenium.webdriver.support import expected_conditions as EC
 from pages.login_form import LoginForm, UserData
 
+
 @allure.epic("Test login form")
 @allure.feature("Login form")
 class TestLogin:

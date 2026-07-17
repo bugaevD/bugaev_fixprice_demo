@@ -42,24 +42,28 @@ class LoginForm(BasePage):
             self.driver.find_element(*self.PASSWORD_INPUT).send_keys(user.password)
         with allure.step("Click login button"):
             self.driver.find_element(*self.LOGIN_SUBMIT_BUTTON).click()
+
     @allure.step("Get error message after login with invalid email")
     def get_email_error(self):
         with allure.step("Check email error message"):
             email_error = self.wait.until(EC.visibility_of_element_located(self.EMAIL_ERROR))
             email_error = email_error.text
             return email_error
+
     @allure.step("Get error message after login with invalid password")
     def get_password_error(self):
         with allure.step("Check password error message"):
             password_error = self.wait.until(EC.visibility_of_element_located(self.PASSWORD_ERROR))
             password_error = password_error.text
             return password_error
+
     @allure.step("Get error message after login with invalid data")
     def get_login_error(self):
         with allure.step("Check login error message"):
             login_error = self.wait.until(EC.visibility_of_element_located(self.LOGIN_ERROR))
             login_error = login_error.text
             return login_error
+
     @allure.step("Get user profile name after success login")
     def get_profile_name(self):
         return self.driver.find_element(*BasePage.PROFILE_NAME).text
