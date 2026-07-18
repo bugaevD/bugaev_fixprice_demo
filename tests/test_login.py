@@ -11,8 +11,7 @@ from pages.login_form import LoginForm, UserData
 class TestLogin:
 
     @allure.title("Successful login with email")
-    def test_login_by_email_success(self, driver, base_page, valid_user):
-        login_form = LoginForm(driver)
+    def test_login_by_email_success(self, login_form, base_page, valid_user):
         login_form.open_login()
         login_form.fill_login_form(valid_user)
         login_form.wait.until(EC.invisibility_of_element_located(LoginForm.LOGIN_FORM))
@@ -26,8 +25,7 @@ class TestLogin:
         ("testuser@test.ru", "invalid_password", "login_error"),
         ("afsnklnsdkbdasjhbkjhads@mail.ru", "valid_pass", "login_error"),
     ])
-    def test_login_by_email_fail(self, driver, base_page, email, password, error):
-        login_form = LoginForm(driver)
+    def test_login_by_email_fail(self, login_form, base_page, email, password, error):
         invalid_data = UserData(email=email, password=password)
         login_form.open_login()
         login_form.fill_login_form(invalid_data)
