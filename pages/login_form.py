@@ -16,7 +16,7 @@ class UserData:
     expected_name: Optional[str] = None
 
 
-class LoginForm(BasePage):
+class LoginForm:
     LOGIN_FORM = (By.CSS_SELECTOR, ".wrapper.modal-child")
     LOGIN_BUTTON = (By.CSS_SELECTOR, ".login-btn")
     LOGIN_EMAIL = (By.XPATH, "//button[contains(@class, 'outline-tetriary') and span[text()='По email']]")
@@ -26,6 +26,10 @@ class LoginForm(BasePage):
     EMAIL_ERROR = (By.CSS_SELECTOR, ".login .error")
     PASSWORD_ERROR = (By.CSS_SELECTOR, ".password .error")
     LOGIN_ERROR = (By.CSS_SELECTOR, ".informer.error .content")
+
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WebDriverWait(self.driver, 10)
 
     @allure.step("Open login form")
     def open(self):
