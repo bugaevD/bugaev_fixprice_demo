@@ -35,24 +35,24 @@ class TestBasePage:
         with allure.step(f"Check {product} in search result dropdown"):
             assert product.lower() in first_result.lower(), f"Название искомого продукта {product} не совпадает с названием найденого {first_result}"
 
-    def test_add_first_product_to_shopping_cart(self, login, cart_with_cleanup, base_url):
+    def test_add_first_product_to_shopping_cart(self, login, clean_up_shopping_cart, base_url):
         login.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".modal")))
         login.fill_search_input("футболка")
         login.submit_search_with_keyboard()
-        login.add_product_to_cart()
-        cart_with_cleanup.open(base_url)
+        login.add_first_item_to_cart()
+        clean_up_shopping_cart.open(base_url)
         # login.show_all_products_in_cart()
         with allure.step(f"Check product in shopping cart"):
-            product = cart_with_cleanup.get_first_product()
+            product = clean_up_shopping_cart.get_first_item()
             assert "футболка" in product.lower(), f"Ожидали 'футболка', получили: {product}"
 
     def test_remove_first_product_from_shopping_cart(self, login, cart, base_url):
         login.fill_search_input("футболка")
         login.submit_search_with_keyboard()
-        login.add_product_to_cart()
+        login.add_first_item_to_cart()
         cart.open(base_url)
         # login.show_all_products_in_cart()
         with allure.step(f"Check product in shopping cart"):
-            product = cart.get_first_product()
+            product = cart.get_first_item()
             assert "футболка" in product.lower(), f"Ожидали 'футболка', получили: {product}"
-        cart.remove_first_item_from_shopping_cart()
+        cart.remove_first_item()
