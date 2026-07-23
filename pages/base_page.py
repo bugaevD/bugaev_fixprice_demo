@@ -26,6 +26,7 @@ class BasePage:
     LIST_OF_STORES = (By.CSS_SELECTOR, ".stores-list .item")
     ADDRESS_TITLE = (By.CSS_SELECTOR, "[data-component=AddressTitle] span")
     ADDRESS_CHOOSE_BUTTON = (By.CSS_SELECTOR, ".selected-store button")
+    COUNTER_VALUE = (By.CSS_SELECTOR, ".counter-value")
 
     def __init__(self, driver):
         self.driver = driver
@@ -75,15 +76,13 @@ class BasePage:
     def add_product_to_cart(self):
         self.wait.until(EC.visibility_of_element_located(self.SEARCH_ITEMS))
         self.driver.find_element(*self.ADD_PRODUCT_TO_CART).click()
-        self.wait.until(EC.visibility_of_element_located(self.PRODUCT_DETAILS))
+        self.wait.until(EC.visibility_of_element_located(self.COUNTER_VALUE))
 
     @allure.step("Choose favorite magazine")
     def choose_default_store(self):
         self.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".modal-outer")))
         self.driver.find_element(*self.OBTAIN_METHOD).click()
         self.wait.until(EC.visibility_of_element_located(self.DELIVERY_MODAL))
-        # self.driver.find_element(*self.ADDRESS_FIELD).send_keys("г.Москва, вн.тер.г.муницип.округ Красносельский, пл.Комсомольская, д.6")
-        # address_title = self.wait.until(EC.visibility_of_element_located(self.ADDRESS_TITLE)).text
         self.driver.find_elements(*self.CHOOSE_LIST_OF_STORES)[1].click()
         self.wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".stores-list")))
         self.driver.find_elements(*self.LIST_OF_STORES)[0].click()
