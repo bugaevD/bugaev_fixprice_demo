@@ -20,7 +20,7 @@ class TestBasePage:
         with allure.step(f"Check {product} in search result"):
             assert product.lower() in first_result.lower(), f"Первый результат поиска {first_result} не содержит в себе {product}"
 
-    def test_invalid_search(self, base_page):
+    def test_non_existed_product(self, base_page):
         base_page.fill_search_input("paWSOJD[KNSFK;CJBLas bcvc x")
         error_message = base_page.get_search_result_error_message()
         with allure.step(f"Check {error_message} in search result"):
@@ -35,7 +35,7 @@ class TestBasePage:
         with allure.step(f"Check {product} in search result dropdown"):
             assert product.lower() in first_result.lower(), f"Название искомого продукта {product} не совпадает с названием найденого {first_result}"
 
-    def test_add_product_to_shopping_cart(self, login, cart_with_cleanup, base_url):
+    def test_add_first_product_to_shopping_cart(self, login, cart_with_cleanup, base_url):
         login.wait.until(EC.invisibility_of_element_located((By.CSS_SELECTOR, ".modal")))
         login.fill_search_input("футболка")
         login.submit_search_with_keyboard()
@@ -46,7 +46,7 @@ class TestBasePage:
             product = cart_with_cleanup.get_first_product()
             assert "футболка" in product.lower(), f"Ожидали 'футболка', получили: {product}"
 
-    def test_remove_product_from_shopping_cart(self, login, cart, base_url):
+    def test_remove_first_product_from_shopping_cart(self, login, cart, base_url):
         login.fill_search_input("футболка")
         login.submit_search_with_keyboard()
         login.add_product_to_cart()
@@ -55,4 +55,4 @@ class TestBasePage:
         with allure.step(f"Check product in shopping cart"):
             product = cart.get_first_product()
             assert "футболка" in product.lower(), f"Ожидали 'футболка', получили: {product}"
-        cart.remove_item_from_cart()
+        cart.remove_first_item_from_shopping_cart()
