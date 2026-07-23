@@ -73,7 +73,7 @@ class BasePage:
         return self.wait.until(EC.visibility_of_element_located(self.SEARCH_ERROR_MESSAGE)).text
 
     @allure.step("Add first product to cart from search result")
-    def add_product_to_cart(self):
+    def add_first_item_to_cart(self):
         self.wait.until(EC.visibility_of_element_located(self.SEARCH_ITEMS))
         self.driver.find_element(*self.ADD_PRODUCT_TO_CART).click()
         self.wait.until(EC.visibility_of_element_located(self.COUNTER_VALUE))
