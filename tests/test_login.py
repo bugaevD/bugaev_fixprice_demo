@@ -1,5 +1,3 @@
-import os
-
 import allure
 import pytest
 from selenium.webdriver.support import expected_conditions as EC
@@ -25,25 +23,6 @@ class TestLogin:
         ("testuser@test.ru", "invalid_password", "login_error"),
         ("afsnklnsdkbdasjhbkjhads@mail.ru", "valid_pass", "login_error"),
     ])
-    # def test_login_by_email_fail(self, login_form, base_page, email, password, error):
-    #     invalid_data = UserData(email=email, password=password)
-    #     login_form.open()
-    #     login_form.fill_in(invalid_data)
-    #     if error == "email":
-    #         with allure.step("Check email error message"):
-    #             email_error = login_form.get_email_warning()
-    #             assert "Требуется указать email" == email_error
-    #     elif error == "password":
-    #         with allure.step("Check password error message"):
-    #             password_error = login_form.get_password_warning()
-    #             assert "Требуется указать пароль" == password_error
-    #     elif error == "login_error":
-    #         with allure.step("Check login error message"):
-    #             login_error = login_form.get_login_warning()
-    #             assert "Неверный логин или пароль. Проверьте введённые данные и попробуйте снова." in login_error
-    #     else:
-    #         assert False, f"Неизвестный тип ошибки: {error}"
-
     def test_login_by_email_fail(self, login_form, base_page, email, password, warning):
         invalid_data = UserData(email=email, password=password)
         login_form.open()
@@ -63,4 +42,4 @@ class TestLogin:
                     assert "Неверный логин или пароль. Проверьте введённые данные и попробуйте снова." in login_error, "Сообщение об ошибке не высветилось"
 
             case _:
-                assert  False, "Неизвестное сообщение об ошибке"
+                assert False, "Неизвестное сообщение об ошибке"
