@@ -124,8 +124,8 @@ def valid_user():
 @pytest.fixture
 def login(driver, base_page, valid_user):
     login_form = LoginForm(driver)
-    login_form.open_login()
-    login_form.fill_login_form(valid_user)
+    login_form.open()
+    login_form.fill_in(valid_user)
     base_page.choose_default_store()
     return base_page
 

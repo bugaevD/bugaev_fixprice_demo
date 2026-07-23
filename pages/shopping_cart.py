@@ -16,6 +16,8 @@ class ShoppingCart(BasePage):
     REMOVE_ITEM_BUTTON = (By.CSS_SELECTOR, "[data-test=button-remove-desktop]")
     EMPTY_CART = (By.CSS_SELECTOR, ".empty-cart .message")
     CART_TITLE = (By.CSS_SELECTOR, "h1.title")
+    ITEM_IN_CART = (By.CSS_SELECTOR, "[data-test=product]")
+    ITEM_TITLE = (By.CSS_SELECTOR, "[data-test=product] [data-test=button-title]")
 
     @allure.step("Open shopping cart page")
     def open(self, base_url):
@@ -38,3 +40,11 @@ class ShoppingCart(BasePage):
         self.driver.refresh()
         empty_cart_message = self.wait.until(EC.visibility_of_element_located(self.EMPTY_CART)).text
         assert "Самое время выбрать товары!" == empty_cart_message, "Корзина не очистилась"
+
+    # def check_items_in_cart(self):
+    #     items = self.wait.until(EC.visibility_of_all_elements_located(self.ITEM_IN_CART))
+    #     if items:
+    #         for item in items:
+    #             self.driver.find_element(*self.REMOVE_ITEM_BUTTON).click()
+    #
+
