@@ -28,12 +28,12 @@ class LoginForm(BasePage):
     LOGIN_ERROR = (By.CSS_SELECTOR, ".informer.error .content")
 
     @allure.step("Open login form")
-    def open_login(self):
+    def open(self):
         self.driver.find_element(*self.LOGIN_BUTTON).click()
         self.wait.until(EC.element_to_be_clickable(self.LOGIN_EMAIL))
 
     @allure.step("Login by email")
-    def fill_login_form(self, user: UserData):
+    def fill_in(self, user: UserData):
         with allure.step("Open login by email"):
             self.driver.find_element(*self.LOGIN_EMAIL).click()
         with allure.step(f"Fill user email with: {user.email}"):
@@ -44,21 +44,21 @@ class LoginForm(BasePage):
             self.driver.find_element(*self.LOGIN_SUBMIT_BUTTON).click()
 
     @allure.step("Get error message after login with invalid email")
-    def get_email_error(self):
+    def get_email_warning(self):
         with allure.step("Check email error message"):
             email_error = self.wait.until(EC.visibility_of_element_located(self.EMAIL_ERROR))
             email_error = email_error.text
             return email_error
 
     @allure.step("Get error message after login with invalid password")
-    def get_password_error(self):
+    def get_password_warning(self):
         with allure.step("Check password error message"):
             password_error = self.wait.until(EC.visibility_of_element_located(self.PASSWORD_ERROR))
             password_error = password_error.text
             return password_error
 
     @allure.step("Get error message after login with invalid data")
-    def get_login_error(self):
+    def get_login_warning(self):
         with allure.step("Check login error message"):
             login_error = self.wait.until(EC.visibility_of_element_located(self.LOGIN_ERROR))
             login_error = login_error.text
