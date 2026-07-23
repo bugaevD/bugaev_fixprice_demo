@@ -57,7 +57,7 @@ def driver(request):
 
     if is_local:
         options = webdriver.ChromeOptions()
-        options.add_argument("--window-size=1920,1080")
+        options.add_argument("--window-size=2560,1440")
         driver = webdriver.Chrome(options=options)
 
     else:
@@ -136,11 +136,11 @@ def cart(driver):
 
 
 @pytest.fixture
-def cart_with_cleanup(driver, base_url):
+def clean_up_shopping_cart(driver, base_url):
     cart = ShoppingCart(driver)
     yield cart
     cart.open(base_url)
-    cart.remove_item_from_cart()
+    cart.remove_all_items()
 
 @pytest.fixture
 def login_form(driver):
